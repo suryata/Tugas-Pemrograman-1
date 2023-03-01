@@ -22,7 +22,7 @@ public class NotaGenerator {
             if (pilihan==1){
                 System.out.println("================================");
                 System.out.print("Masukkan nama Anda: \n");
-                String nama=input.nextLine();
+                String nama=inputNama();
                 String nomorHP=inputHP();
 
                 // akan memanggil generateID dan mereturn ID customer
@@ -37,7 +37,7 @@ public class NotaGenerator {
             else if (pilihan==2){
                 System.out.println("================================");
                 System.out.print("Masukkan nama Anda: \n");
-                String nama=input.nextLine();
+                String nama=inputNama();
                 String nomorHP=inputHP();
 
                 //akan memanggil generateId seperti menu 1 
@@ -87,6 +87,18 @@ public class NotaGenerator {
         
     }
 
+    //method untuk memasukkan nama
+    public static String inputNama() {
+        String nama = input.nextLine();
+        //jika input kosong maka akan meminta ulang nama
+        while (nama.isEmpty()) {
+            System.out.println("Anda belum memasukkan nama Anda.");
+            System.out.print("Masukkan nama Anda: \n");
+            nama = input.nextLine();
+        }
+        return nama;
+    }
+
     public static int inputMenu(){
         int pilihan=-1;
         boolean valid=false;
@@ -121,9 +133,17 @@ public class NotaGenerator {
         boolean valid=false;
         System.out.println("Masukkan berat cucian Anda [Kg]: ");
         while(!valid){
+            //dari discord dikatakan jika input seperti "1 2" akan meminta input ulang maka saya menghandle nya
             try{
-                berat = input.nextInt();
-                input.nextLine();
+                String beratString = input.nextLine();
+                String[] arrayCheck = beratString.split("\\s+");
+
+                if(arrayCheck.length >1){
+                    System.out.println("Harap masukkan berat cucian Anda dalam bentuk bilangan positif.");
+                    continue;
+                }
+
+                berat=Integer.parseInt(arrayCheck[0]);
                 //jika berat kurang dari 1 akan meminta input ulang
                 if(berat<1){
                     System.out.println("Harap masukkan berat cucian Anda dalam bentuk bilangan positif.");
@@ -132,9 +152,8 @@ public class NotaGenerator {
                     valid=true;
                 }
             //jika string akan meminta input ulang
-            }catch(InputMismatchException e){
+            }catch(NumberFormatException e){
                 System.out.println("Harap masukkan berat cucian Anda dalam bentuk bilangan positif.");
-                input.next(); //mengosongkan isi input buffer
             }
         }
         //mereturn berat yang sudah valid
@@ -171,13 +190,17 @@ public class NotaGenerator {
     //akan memvalidasi paket yang dipilih
     public static String inputPaket(){
         boolean ada=false;
+        String paketLengkap="";
         String paketAsli="";
         String paketDipilih="";
         //selama paket belum valid program akan tetap meminta input
         while(!ada){
             System.out.println("Masukkan paket laundry: ");
             //saya melowercase nya karena di discord disebutkan case insensitive
-            paketAsli=input.next();
+            //agar jika memasukkan input kosong meminta ulang input (handle)
+            paketLengkap=input.nextLine();
+            String[] paket = paketLengkap.split(" ");
+            paketAsli = paket[0];
             paketDipilih=paketAsli.toLowerCase();
 
             if(paketDipilih.equals("express")){
@@ -191,6 +214,11 @@ public class NotaGenerator {
             }
             else if(paketDipilih.equals("?")){
                 showPaket();
+            }
+            //saye menghandle jika input kosong
+            else if(paketDipilih.isEmpty()){
+                System.out.printf("Anda belum memasukkan jenis paket");
+                System.out.println("\n[ketik ? untuk mencari tahu jenis paket]");
             }
             //jika tidak ada maka mengeprint paket tidak diketahui
             else{
