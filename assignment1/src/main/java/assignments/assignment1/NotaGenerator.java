@@ -151,7 +151,7 @@ public class NotaGenerator {
                 else{
                     valid=true;
                 }
-            //jika string akan meminta input ulang
+            //jika string atau float akan meminta input ulang
             }catch(NumberFormatException e){
                 System.out.println("Harap masukkan berat cucian Anda dalam bentuk bilangan positif.");
             }
@@ -175,11 +175,11 @@ public class NotaGenerator {
                 }
                 //jika didalam angka terdapat string juga meminta input ulang
                 else{
-                    System.out.println("Nomor hp hanya menerima digit");
+                    System.out.println("Field nomor hp hanya menerima digit.");
                 }
             //jika string akan meminta input ulang
             }catch(InputMismatchException e){
-                System.out.println("Nomor hp hanya menerima digit");
+                System.out.println("Field nomor hp hanya menerima digit.");
                 input.next(); //mengosongkan isi input buffer
             }
         }
@@ -188,18 +188,24 @@ public class NotaGenerator {
     }
 
     //akan memvalidasi paket yang dipilih
-    public static String inputPaket(){
-        boolean ada=false;
-        String paketLengkap="";
-        String paketAsli="";
-        String paketDipilih="";
-        //selama paket belum valid program akan tetap meminta input
-        while(!ada){
-            System.out.println("Masukkan paket laundry: ");
-            //saya melowercase nya karena di discord disebutkan case insensitive
-            //agar jika memasukkan input kosong meminta ulang input (handle)
-            paketLengkap=input.nextLine();
-            String[] paket = paketLengkap.split(" ");
+public static String inputPaket(){
+    boolean ada=false;
+    String paketLengkap="";
+    String paketAsli="";
+    String paketDipilih="";
+    //selama paket belum valid program akan tetap meminta input
+    while(!ada){
+        System.out.println("Masukkan paket laundry: ");
+        //saya melowercase nya karena di discord disebutkan case insensitive
+        //agar jika memasukkan input kosong meminta ulang input (handle)
+        paketLengkap=input.nextLine();
+        String[] paket = paketLengkap.split(" ");
+        // cek apakah kata lebih dari 1
+        if (paket.length > 1) {
+            ada = false;
+            System.out.printf("Paket %s tidak diketahui",paketLengkap);
+            System.out.println("\n[ketik ? untuk mencari tahu jenis paket]");
+        } else {
             paketAsli = paket[0];
             paketDipilih=paketAsli.toLowerCase();
 
@@ -226,10 +232,10 @@ public class NotaGenerator {
                 System.out.println("\n[ketik ? untuk mencari tahu jenis paket]");
             }
         }
-        //akan mereturn paket asli sesuai yang ditulis oleh pengguna
-        return paketAsli;
-        
     }
+    //akan mereturn paket asli sesuai yang ditulis oleh pengguna
+    return paketAsli;
+}
 
     
     
