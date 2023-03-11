@@ -1,3 +1,4 @@
+//menggunakan package assignment1
 package assignments.assignment2;
 import assignments.assignment1.NotaGenerator;
 
@@ -41,20 +42,23 @@ public class Member {
         return this.bonusCounter;
     }
 
-    //methods yang diperlukan untuk class ini
-    
+    //menentukan member berhak mendapat diskon atau tidak
     public boolean isEligible() {
         return dapatDiskon;
     }
-    
+
+    //methods yang diperlukan untuk class ini
+    //untuk mengset menjadi false jika sudah mendapat diskon
     public void setEligibleForDiscount(boolean eligibleForDiscount) {
         this.dapatDiskon = eligibleForDiscount;
     }
 
+    //mereset bonus counter menjadi 0 
     public void resetbonusCounter(){
         this.bonusCounter=0;
     }
 
+    //menambah bonus counter dan jika bonus counter 3, member akan mendapat diskon
     public void addOrder() {
         bonusCounter++;
         if (bonusCounter == 3) {
