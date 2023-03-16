@@ -19,7 +19,7 @@ public class Member {
         this.bonusCounter=0;
         this.dapatDiskon=false;
         
-        System.out.printf("Berhasil membuat member dengan ID %s !",this.getid());
+        System.out.printf("Berhasil membuat member dengan ID %s!\n",this.getid());
     }
 
     //getter nama
@@ -38,7 +38,7 @@ public class Member {
     }
 
     //getter bonus
-    public int bonusCounter(){
+    public int getbonusCounter(){
         return this.bonusCounter;
     }
 

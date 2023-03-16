@@ -98,9 +98,9 @@ public class MainMenu {
         if(memberAda==true){
             String paket = inputPaket();
             int berat = validasiBerat();
+            memberCuci.addOrder();
             Nota nota = new Nota(memberCuci, paket, berat, tanggal);
             notaList.add(nota);
-            memberCuci.addOrder();
         }else{
             System.out.printf("Member dengan ID %s tidak ditemukan!\n",idMember);   //jika tidak akan mengeprint member tidak ditemukan
         }
@@ -167,7 +167,7 @@ public class MainMenu {
 
     //mengeprint menu
     private static void printMenu() {
-        System.out.println("\n\nSelamat datang di CuciCuci!");
+        System.out.println("\nSelamat datang di CuciCuci!");
         System.out.printf("Sekarang Tanggal: %s\n", fmt.format(cal.getTime()));
         System.out.println("==============Menu==============");
         System.out.println("[1] Generate User");
@@ -210,7 +210,7 @@ public class MainMenu {
         }
         //jika tidak ada maka nota tidak ditemukan
         if (notaAda==false){
-            System.out.printf("Nota dengan ID %d tidak ditemukan!",idNota);
+            System.out.printf("Nota dengan ID %d tidak ditemukan!\n",idNota);
         }
         return null;
     }

@@ -204,7 +204,7 @@ public class Nota {
                 berat+" kg x "+harga+" = "+hargaTotal+diskon+ "\n" +
                 "Tanggal Terima  : "+tanggalTerima+"\n" +
                 "Tanggal Selesai : "+tanggalSelesai+"\n"+
-                "Status          : "+status;
+                "Status          : "+status+"\n";
 
         return solution;
 
