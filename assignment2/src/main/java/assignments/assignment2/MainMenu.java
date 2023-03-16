@@ -55,7 +55,7 @@ public class MainMenu {
         else{
             for (Member element : memberList){
                 if(element.getid().equals(tempId)){
-                    System.out.printf("Member dengan nama %s dan nomor hp %s sudah ada!\n",element.getNama(),element.getnoHp());
+                    System.out.printf("Member dengan nama %s dan nomor hp %s sudah ada!\n",nama,element.getnoHp());
                     memberAda=true;
                     break;
                 }
@@ -187,6 +187,11 @@ public class MainMenu {
             String angka = input.nextLine();
             try {
                 num = Integer.parseInt(angka);
+                if(num < 0){
+                    //di Discord jika negatif id nota berbentuk angka
+                    System.out.println("ID nota berbentuk angka!");
+                    continue;
+                }
                 validInput = true;
             } catch (NumberFormatException e) {
                 System.out.println("ID nota berbentuk angka!");
@@ -194,6 +199,7 @@ public class MainMenu {
         }
         return num;
     }
+    
 
     //mencari nota berdasarkan id nota 
     public static Nota cariNota(int idNota){
