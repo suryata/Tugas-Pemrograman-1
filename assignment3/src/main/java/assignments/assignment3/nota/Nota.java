@@ -20,6 +20,7 @@ public class Nota {
     private boolean isDone;
     static public int totalNota;
     private String tanggalSelesai;
+    public int hariTelat;
 
     public Nota(Member member, int berat, String paket, String tanggal) {
         this.member = member;
@@ -53,7 +54,7 @@ public class Nota {
         try {
             Date originalDate = fmt.parse(hariSekarang);
             Date modifiedDate = fmt.parse(hariSelesai);
-            long difference = modifiedDate.getTime() - originalDate.getTime();
+            long difference = originalDate.getTime() - modifiedDate.getTime();
             // Calculating the difference in days
             int daysDifference = (int) (difference / (24 * 60 * 60 * 1000));
             return daysDifference;
@@ -64,26 +65,31 @@ public class Nota {
     }
 
     public String kompensasi(){
-        Calendar cal = Calendar.getInstance();
-        Date tanggalSekarang = cal.getTime();
+        Date tanggalSekarang = NotaManager.cal.getTime();
         String tanggal = fmt.format(tanggalSekarang);
-        int haritelat = hitungPerbedaanHari(tanggal, tanggalSelesai);
-
-        if((haritelat <= 0) && isDone){
-            return "";
+        hariTelat = hitungPerbedaanHari(tanggal, tanggalSelesai);
+        setIsDone();
+    
+        if((hariTelat > 0) && !isDone){
+            return " Ada kompensasi keterlambatan 2 * 2000 hari"+hariTelat;
         }
         else{
-            return "Ada kompensasi keterlambatan 2 * 2000 hari";
+            return " ";
         }
     };
 
     public void addService(LaundryService service){
-        LaundryService[] newArray = new LaundryService[services.length+1];
-        for(int i= 0; i<services.length;i++){
-            newArray[i] = services[i];
+        if (services == null) {
+            services = new LaundryService[]{service};
+        } else {
+            LaundryService[] newArray = new LaundryService[services.length + 1];
+            for (int i = 0; i < services.length; i++) {
+                newArray[i] = services[i];
+            }
+            newArray[services.length] = service;
+            services = newArray;
         }
-        newArray[services.length] = service;
-        services = newArray;
+    
     }
 
     public String kerjakan(){
@@ -92,7 +98,7 @@ public class Nota {
                 return laundryService.doWork();
             }
         }
-        return "";
+        return "Sudah selesai.";
     }
 
     public void toNextDay() {
@@ -102,22 +108,36 @@ public class Nota {
     }
 
     public long calculateHarga(){
+        long harga = baseHarga*berat;
         if(services.length==0){
-            return baseHarga;
+            return harga;
         }
         else{
             for(LaundryService service : services){
-                baseHarga+=service.getHarga(berat);
+                harga+=service.getHarga(berat);
             }
-            return baseHarga;
+            return harga;
         }
     }
 
+    public void setIsDone(){
+        boolean allServicesDone = true;
+        for (LaundryService laundryService : services) {
+            if(!laundryService.isDone()){
+                allServicesDone = false;
+                break;
+            }
+        }
+        isDone = allServicesDone;
+    }
+
     public String getNotaStatus(){
+        setIsDone();
         if(isDone){
             return "Sudah selesai.";
+        }else{
+            return "Belum selesai.";
         }
-        return "Belum selesai.";
     }
 
     public String getServiceList(LaundryService[] services) {
@@ -136,12 +156,12 @@ public class Nota {
         "ID    : "+member.getId()+"\n"+
         "Paket : "+paket+"\n"+
         "Harga : \n"+
-        berat+" kg x "+baseHarga+" = "+baseHarga*berat+"\n"+
+        berat+" kg x "+baseHarga+" = "+berat*baseHarga+"\n"+
         "tanggal terima  : "+tanggalMasuk+"\n"+
         "tanggal selesai : "+tanggalSelesai+"\n"+
         "--- SERVICE LIST ---\n"+
         service+
-        "Harga Akhir:"+ hargaTotal +"\n";
+        "Harga Akhir: "+ (hargaTotal-(hariTelat*2000)) +kompensasi()+"\n";
     }
 
     // Dibawah ini adalah getter

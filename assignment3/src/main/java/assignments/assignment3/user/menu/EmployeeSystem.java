@@ -29,15 +29,11 @@ public class EmployeeSystem extends SystemCLI {
     @Override
     protected boolean processChoice(int choice) {
         boolean logout = false;
-        while (!logout) {
-            switch (choice) {
-                case 1 -> nyuci();
-                case 2 -> nota();
-                case 3 -> logout = true;
-                default -> System.out.println("Pilihan tidak valid, silakan coba lagi.");
-            }
-            choice = in.nextInt();
-            in.nextLine();
+        switch (choice) {
+            case 1 -> nyuci();
+            case 2 -> nota();
+            case 3 -> logout = true;
+            default -> System.out.println("Pilihan tidak valid, silakan coba lagi.");
         }
         return logout;
     }
@@ -53,15 +49,15 @@ public class EmployeeSystem extends SystemCLI {
     }
 
     public void nyuci(){
-        System.out.printf("Stand back! %s beginning to nyuci!",loginMember.getNama());
+        System.out.printf("Stand back! %s beginning to nyuci!\n",loginMember.getNama());
         for(Nota nota : notaList){
-            nota.kerjakan();
+            System.out.println("Nota "+nota.getId()+" : "+nota.kerjakan());
         }
     }
 
     public void nota(){
         for(Nota nota : notaList){
-            System.out.println("Nota "+nota.getId()+": "+nota.getNotaStatus());
+            System.out.println("Nota "+nota.getId()+" : "+nota.getNotaStatus());
         }
     }
 }

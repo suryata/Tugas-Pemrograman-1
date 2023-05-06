@@ -20,15 +20,11 @@ public class MemberSystem extends SystemCLI {
     @Override
     protected boolean processChoice(int choice) {
         boolean logout = false;
-        while (!logout) {
-            switch (choice) {
-                case 1 -> laundry();
-                case 2 -> nota();
-                case 3 -> logout = true;
-                default -> System.out.println("Pilihan tidak valid, silakan coba lagi.");
-            }
-            choice = in.nextInt();
-            in.nextLine();
+        switch (choice) {
+            case 1 -> laundry();
+            case 2 -> nota();
+            case 3 -> logout = true;
+            default -> System.out.println("Pilihan tidak valid, silakan coba lagi.");
         }
         return logout;
     }
@@ -61,11 +57,20 @@ public class MemberSystem extends SystemCLI {
         // Logic for handling laundry choice
         String paket = inputPaket();
         int berat = validasiBerat();
+        String pembulatan;
+        if (berat<2){
+            berat=2;
+            pembulatan="Cucian kurang dari 2 kg, maka cucian akan dianggap sebagai 2 kg\n";
+        }
+        else{
+            pembulatan="";
+        }
+        System.out.print(pembulatan);
         System.out.println("Apakah kamu ingin cucianmu disetrika oleh staff professional kami?\n"+"Hanya tambah 1000 / kg :0");
-        System.out.print("[Ketik x untuk tidak mau]:");
+        System.out.print("[Ketik x untuk tidak mau]: ");
         boolean setrika = validasiService();
-        System.out.println("Mau diantar oleh kurir kami? Dijamin aman dan cepat sampai tujuan!\n"+"Cuma 2000 / 4kg, kemudian 500 / kg\n");
-        System.out.print("[Ketik x untuk tidak mau]:");
+        System.out.println("Mau diantar oleh kurir kami? Dijamin aman dan cepat sampai tujuan!\n"+"Cuma 2000 / 4kg, kemudian 500 / kg");
+        System.out.print("[Ketik x untuk tidak mau]: ");
         boolean antar = validasiService();
 
         Calendar cal = Calendar.getInstance();
@@ -82,7 +87,8 @@ public class MemberSystem extends SystemCLI {
 
         loginMember.addNota(nota);
         NotaManager.addNota(nota);
-        System.out.println("Nota berhasil dibuat!");
+        System.out.print("Nota berhasil dibuat!\n");
+
     }
     
     private static SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");   //format tanggal
@@ -90,7 +96,7 @@ public class MemberSystem extends SystemCLI {
     private void nota() {
         // Logic for handling nota choice
         for (Nota nota : loginMember.getNotaList()) {
-            nota.getNotaStatus();
+            System.out.println(nota.toString());
         }
     }
 
@@ -108,7 +114,7 @@ public class MemberSystem extends SystemCLI {
         System.out.println("| Express | 1 Hari | 12000 / Kg |");
         System.out.println("| Fast    | 2 Hari | 10000 / Kg |");
         System.out.println("| Reguler | 3 Hari |  7000 / Kg |");
-        System.out.println("+-------------------------------+\n");
+        System.out.println("+-------------------------------+");
     }
 
     private String inputPaket(){
@@ -158,7 +164,7 @@ public class MemberSystem extends SystemCLI {
     public int validasiBerat(){
         int berat=0;
         boolean valid=false;
-        System.out.println("Masukkan berat cucian Anda [Kg]: \n");
+        System.out.println("Masukkan berat cucian Anda [Kg]: ");
         while(!valid){
             //dari discord dikatakan jika input seperti "1 2" akan meminta input ulang maka saya menghandle nya
             try{

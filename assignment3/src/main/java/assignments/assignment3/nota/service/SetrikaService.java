@@ -5,7 +5,7 @@ public class SetrikaService implements LaundryService{
     @Override
     public String doWork() {
         done = true;
-        return "Sedang menyetrika";
+        return "Sedang menyetrika...";
     }
 
     @Override

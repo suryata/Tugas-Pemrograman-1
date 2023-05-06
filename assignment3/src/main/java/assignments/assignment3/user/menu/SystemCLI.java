@@ -1,5 +1,6 @@
 package assignments.assignment3.user.menu;
 
+import assignments.assignment3.MainMenu;
 import assignments.assignment3.user.Member;
 
 import java.util.Scanner;
@@ -24,9 +25,9 @@ public abstract class SystemCLI {
             this.in = in;
             System.out.println("Login successful!");
             run(in, authMember);
+        }else{
+            System.out.println("Invalid ID or password.");
         }
-
-        System.out.println("Invalid ID or password.");
     };
 
     /**

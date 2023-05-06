@@ -6,6 +6,7 @@ import assignments.assignment3.user.menu.EmployeeSystem;
 import assignments.assignment3.user.menu.MemberSystem;
 import assignments.assignment3.user.menu.SystemCLI;
 
+import java.util.Calendar;
 import java.util.Scanner;
 
 import static assignments.assignment3.nota.NotaManager.cal;
@@ -57,6 +58,7 @@ public class MainMenu {
     private void toNextDay() {
         System.out.println("Kamu tidur hari ini... zzz...");
         NotaManager.toNextDay();
+        cal.add(Calendar.DATE,1);
     }
 
     /**
@@ -72,10 +74,10 @@ public class MainMenu {
 
         Member registeredMember = loginManager.register(nama, noHp, password);
         if(registeredMember == null){
-            System.out.printf("User dengan nama %s dan nomor hp %s sudah ada!\n", nama, noHp);
+            System.out.printf("User dengan nama %s dan nomor hp %s sudah ada!\n\n", nama, noHp);
             return;
         }
-        System.out.printf("Berhasil membuat user dengan ID %s!\n", registeredMember.getId());
+        System.out.printf("Berhasil membuat user dengan ID %s!\n\n", registeredMember.getId());
     }
 
     /**
