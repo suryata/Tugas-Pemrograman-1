@@ -65,15 +65,13 @@ public class Nota {
     }
 
     public String kompensasi(){
-        Date tanggalSekarang = NotaManager.cal.getTime();
-        String tanggal = fmt.format(tanggalSekarang);
-        hariTelat = hitungPerbedaanHari(tanggal, tanggalSelesai);
+        hariTelat = hitungPerbedaanHari(fmt.format(NotaManager.cal.getTime()), tanggalSelesai);
         setIsDone();
-    
         if((hariTelat > 0) && !isDone){
             return " Ada kompensasi keterlambatan 2 * 2000 hari"+hariTelat;
         }
         else{
+
             return " ";
         }
     };
@@ -150,8 +148,15 @@ public class Nota {
 
     @Override
     public String toString(){
+        if(isDone){
+            hariTelat=0;
+        }else{
+            hariTelat = hitungPerbedaanHari(fmt.format(NotaManager.cal.getTime()), tanggalSelesai);
+        }
         String service = getServiceList(services);
         long hargaTotal = calculateHarga();
+        long hargaAkhir = hargaTotal-hariTelat*2000L;
+
         return "[ID Nota = "+id+"]\n"+
         "ID    : "+member.getId()+"\n"+
         "Paket : "+paket+"\n"+
@@ -161,7 +166,7 @@ public class Nota {
         "tanggal selesai : "+tanggalSelesai+"\n"+
         "--- SERVICE LIST ---\n"+
         service+
-        "Harga Akhir: "+ (hargaTotal-(hariTelat*2000)) +kompensasi()+"\n";
+        "Harga Akhir: "+ hargaAkhir+ kompensasi()+"\n";
     }
 
     // Dibawah ini adalah getter
