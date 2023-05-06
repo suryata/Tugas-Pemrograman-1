@@ -51,13 +51,13 @@ public class EmployeeSystem extends SystemCLI {
     public void nyuci(){
         System.out.printf("Stand back! %s beginning to nyuci!\n",loginMember.getNama());
         for(Nota nota : notaList){
-            System.out.println("Nota "+nota.getId()+" : "+nota.kerjakan());
+            System.out.println(nota.kerjakan());
         }
     }
 
     public void nota(){
         for(Nota nota : notaList){
-            System.out.println("Nota "+nota.getId()+" : "+nota.getNotaStatus());
+            System.out.println(nota.getNotaStatus());
         }
     }
 }

@@ -6,7 +6,6 @@ import java.util.Date;
 import assignments.assignment3.nota.Nota;
 import assignments.assignment3.nota.NotaManager;
 import assignments.assignment3.nota.service.AntarService;
-import assignments.assignment3.nota.service.CuciService;
 import assignments.assignment3.nota.service.SetrikaService;
 import assignments.assignment3.user.Member;
 
@@ -77,7 +76,6 @@ public class MemberSystem extends SystemCLI {
         Date tanggalSekarang = cal.getTime();
         String tanggal = fmt.format(tanggalSekarang);
         Nota nota = new Nota(loginMember, berat, paket, tanggal);
-        nota.addService(new CuciService());
         if (setrika){
             nota.addService(new SetrikaService());
         }

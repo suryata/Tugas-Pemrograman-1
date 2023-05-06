@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import assignments.assignment3.nota.service.LaundryService;
-// import assignments.assignment3.nota.service.SetrikaService;
+import assignments.assignment3.nota.service.CuciService;
 import assignments.assignment3.user.Member;
 
 public class Nota {
@@ -20,7 +20,6 @@ public class Nota {
     private boolean isDone;
     static public int totalNota;
     private String tanggalSelesai;
-    public int hariTelat;
 
     public Nota(Member member, int berat, String paket, String tanggal) {
         this.member = member;
@@ -30,7 +29,8 @@ public class Nota {
         this.sisaHariPengerjaan = lamaHari(paket);
         this.id = totalNota;
         this.baseHarga = hargaPerKG(paket);
-        this.tanggalSelesai = addDate(tanggal, sisaHariPengerjaan);
+        this.tanggalSelesai = addDate(tanggal, sisaHariPengerjaan);  
+        addService(new CuciService());
         totalNota++;
     }
 
@@ -50,29 +50,13 @@ public class Nota {
         }
     }
 
-    private static int hitungPerbedaanHari(String hariSekarang, String hariSelesai) {
-        try {
-            Date originalDate = fmt.parse(hariSekarang);
-            Date modifiedDate = fmt.parse(hariSelesai);
-            long difference = originalDate.getTime() - modifiedDate.getTime();
-            // Calculating the difference in days
-            int daysDifference = (int) (difference / (24 * 60 * 60 * 1000));
-            return daysDifference;
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
     public String kompensasi(){
-        hariTelat = hitungPerbedaanHari(fmt.format(NotaManager.cal.getTime()), tanggalSelesai);
         setIsDone();
-        if((hariTelat > 0) && !isDone){
-            return " Ada kompensasi keterlambatan 2 * 2000 hari"+hariTelat;
+        if((getSisaHariPengerjaan()<0)){
+            return " Ada kompensasi keterlambatan "+Math.abs(getSisaHariPengerjaan())+" * 2000 hari";
         }
         else{
-
-            return " ";
+            return "";
         }
     };
 
@@ -87,20 +71,19 @@ public class Nota {
             newArray[services.length] = service;
             services = newArray;
         }
-    
     }
 
     public String kerjakan(){
         for (LaundryService laundryService : services) {
             if(!laundryService.isDone()){
-                return laundryService.doWork();
+                return "Nota "+getId()+" : "+ laundryService.doWork();
             }
         }
-        return "Sudah selesai.";
+        return "Nota "+getId()+" : "+"Sudah selesai.";
     }
 
     public void toNextDay() {
-        if(sisaHariPengerjaan>0){
+        if(!isDone){
             sisaHariPengerjaan--;
         }
     }
@@ -132,9 +115,9 @@ public class Nota {
     public String getNotaStatus(){
         setIsDone();
         if(isDone){
-            return "Sudah selesai.";
+            return "Nota "+getId()+" : "+"Sudah selesai.";
         }else{
-            return "Belum selesai.";
+            return "Nota "+getId()+" : "+"Belum selesai.";
         }
     }
 
@@ -148,15 +131,13 @@ public class Nota {
 
     @Override
     public String toString(){
-        if(isDone){
-            hariTelat=0;
-        }else{
-            hariTelat = hitungPerbedaanHari(fmt.format(NotaManager.cal.getTime()), tanggalSelesai);
-        }
         String service = getServiceList(services);
-        long hargaTotal = calculateHarga();
-        long hargaAkhir = hargaTotal-hariTelat*2000L;
-
+        long hargaAkhir;
+        if(getSisaHariPengerjaan()<0){
+            hargaAkhir = calculateHarga()+(2000L*getSisaHariPengerjaan());
+        }else{
+            hargaAkhir=calculateHarga();
+        }
         return "[ID Nota = "+id+"]\n"+
         "ID    : "+member.getId()+"\n"+
         "Paket : "+paket+"\n"+

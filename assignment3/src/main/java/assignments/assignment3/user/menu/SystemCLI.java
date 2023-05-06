@@ -1,6 +1,5 @@
 package assignments.assignment3.user.menu;
 
-import assignments.assignment3.MainMenu;
 import assignments.assignment3.user.Member;
 
 import java.util.Scanner;
