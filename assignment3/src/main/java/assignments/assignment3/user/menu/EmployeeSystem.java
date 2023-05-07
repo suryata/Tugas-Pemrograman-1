@@ -27,7 +27,7 @@ public class EmployeeSystem extends SystemCLI {
      * @return true jika user log.
      */
     @Override
-    protected boolean processChoice(int choice) {
+    protected boolean processChoice(int choice) {   //saya menambah method nyuci dan nota
         boolean logout = false;
         switch (choice) {
             case 1 -> nyuci();
@@ -48,6 +48,7 @@ public class EmployeeSystem extends SystemCLI {
         System.out.println("3. Logout");
     }
 
+    //jika dipilih 1 maka akan mengerjakan service pada nota
     public void nyuci(){
         System.out.printf("Stand back! %s beginning to nyuci!\n",loginMember.getNama());
         for(Nota nota : notaList){
@@ -55,6 +56,7 @@ public class EmployeeSystem extends SystemCLI {
         }
     }
 
+    //jika 2 maka akan mengeprint status nota
     public void nota(){
         for(Nota nota : notaList){
             System.out.println(nota.getNotaStatus());

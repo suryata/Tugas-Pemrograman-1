@@ -1,6 +1,7 @@
 package assignments.assignment3.user;
 
 import assignments.assignment3.nota.Nota;
+//berikut atribut dari class member
 public class Member {
     protected String id;
     protected String password;
@@ -8,6 +9,7 @@ public class Member {
     protected String noHP;
     protected Nota[] notaList = new Nota[0];
 
+    //constructor dari member
     public Member(String nama, String id, String password) {
         this.nama = nama;
         this.id = id;

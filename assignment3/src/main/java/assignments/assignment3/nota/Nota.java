@@ -9,6 +9,7 @@ import assignments.assignment3.nota.service.CuciService;
 import assignments.assignment3.user.Member;
 
 public class Nota {
+    //berikut atribut dari nota
     private Member member;
     private String paket;
     private LaundryService[] services;
@@ -21,32 +22,29 @@ public class Nota {
     static public int totalNota;
     private String tanggalSelesai;
 
+    //berikut constructor dari nota
     public Nota(Member member, int berat, String paket, String tanggal) {
         this.member = member;
         this.paket = paket;
         this.berat = berat;
-        try {
-            Date tanggalMasukDate = fmt.parse(tanggal);
-            this.tanggalMasuk = fmt.format(tanggalMasukDate);
-        } catch (ParseException e) {
-            this.tanggalMasuk = fmt.format(Calendar.getInstance().getTime());
-        }
+        this.tanggalMasuk = tanggal;
         this.sisaHariPengerjaan = lamaHari(paket);
         this.id = totalNota;
         this.baseHarga = hargaPerKG(paket);
         this.tanggalSelesai = addDate(tanggal, sisaHariPengerjaan);  
-        addService(new CuciService());
-        totalNota++;
+        addService(new CuciService());                              //tiap buat nota langsung menambahkan cuciService
+        totalNota++;                                                //total nota untuk id nota
     }
 
     private static SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");   //format tanggal
 
+    //method tambah tanggal sesuai paket yang dipilih
     private static String addDate(String tanggalMasuk, int tambahanHari) {
         try {
             Date date = fmt.parse(tanggalMasuk);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
-            cal.add(Calendar.DATE, tambahanHari); // Adding days to the date
+            cal.add(Calendar.DATE, tambahanHari); // penambahan hari
             Date newDate = cal.getTime();
             return fmt.format(newDate);
         } catch (ParseException e) {
@@ -55,6 +53,7 @@ public class Nota {
         }
     }
 
+    //string kompensasi jika telat
     public String kompensasi(){
         if((getSisaHariPengerjaan()<0)){
             return " Ada kompensasi keterlambatan "+Math.abs(getSisaHariPengerjaan())+" * 2000 hari";
@@ -62,8 +61,9 @@ public class Nota {
         else{
             return "";
         }
-    };
+    }
 
+    //add service untuk menambah service jika dipilih
     public void addService(LaundryService service){
         if (services == null) {
             services = new LaundryService[]{service};
@@ -77,6 +77,7 @@ public class Nota {
         }
     }
 
+    //mereturn string sesuai ketentuan dan service akan di doWork sehingga done di service = true
     public String kerjakan(){
         for (LaundryService laundryService : services) {
             if(!laundryService.isDone()){
@@ -86,6 +87,7 @@ public class Nota {
         return "Nota "+getId()+" : "+"Sudah selesai.";
     }
 
+    //next day mengurangi sisaharipengerjaan
     public void toNextDay() {
         setIsDone();
         if(!isDone){
@@ -93,10 +95,12 @@ public class Nota {
         }
     }
 
+    //berfungsi mengkalkulasi harga sesuai service yang dipilih dan juga jumlah hari telat
     public long calculateHarga(){
         long harga = baseHarga*berat;
         if(getSisaHariPengerjaan()<0){
             if(services.length==0){
+                //jika minus akan diubah jadi 0
                 return (harga + 2000L * getSisaHariPengerjaan()) < 0 ? 0 : (harga + 2000L * getSisaHariPengerjaan());
             }
             else{
@@ -118,6 +122,7 @@ public class Nota {
         }
     }
 
+    //berfungsi mengset isDone pada nota jika semua service sudah selesai
     public void setIsDone(){
         boolean allServicesDone = true;
         for (LaundryService laundryService : services) {
@@ -129,6 +134,7 @@ public class Nota {
         isDone = allServicesDone;
     }
 
+    //mereturn status nota
     public String getNotaStatus(){
         setIsDone();
         if(isDone){
@@ -138,6 +144,7 @@ public class Nota {
         }
     }
 
+    //mereturn list dari service yang dipilih
     public String getServiceList(LaundryService[] services) {
         StringBuilder sb = new StringBuilder();
         for (LaundryService service : services) {
@@ -146,6 +153,7 @@ public class Nota {
         return sb.toString();
     }
 
+    //tostring ketika mengeprint nota
     @Override
     public String toString(){
         String service = getServiceList(services);
@@ -161,7 +169,41 @@ public class Nota {
         service+
         "Harga Akhir: "+ hargaAkhir+ kompensasi()+"\n";
     }
+    
+    //menghitung lama hari sama seperti tp sebelumnya
+    public int lamaHari(String paketDipilih){
+        //menentukan lama hari berdasarkan paket yang dipilih
+        String paket =paketDipilih.toLowerCase();
+        int lamaHari;
+        if (paket.equals("express")){
+            lamaHari=1;
+        }
+        else if (paket.equals("fast")){
+            lamaHari=2;
+        }
+        else{
+            lamaHari=3;
+        }
+        return lamaHari;
+    }
 
+    //menghitung harga perKG sama seperti tp sebelumnya
+    public int hargaPerKG(String paketDipilih){
+        String paket =paketDipilih.toLowerCase();
+        int harga;
+        if (paket.equals("express")){
+            harga=12000;
+        }
+        else if (paket.equals("fast")){
+            harga=10000;
+        }
+        else{
+            harga=7000;
+        }
+
+        return harga;
+    }
+    
     // Dibawah ini adalah getter
 
     public String getPaket() {
@@ -192,45 +234,4 @@ public class Nota {
         return id;
     }
 
-    public int lamaHari(String paketDipilih){
-        //menentukan lama hari berdasarkan paket yang dipilih
-        String paket =paketDipilih.toLowerCase();
-        int lamaHari;
-        if (paket.equals("express")){
-            lamaHari=1;
-        }
-        else if (paket.equals("fast")){
-            lamaHari=2;
-        }
-        else{
-            lamaHari=3;
-        }
-        return lamaHari;
-    }
-
-
-    public boolean cekStatus(int lamaHari){
-        if (lamaHari==0){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    public int hargaPerKG(String paketDipilih){
-        String paket =paketDipilih.toLowerCase();
-        int harga;
-        if (paket.equals("express")){
-            harga=12000;
-        }
-        else if (paket.equals("fast")){
-            harga=10000;
-        }
-        else{
-            harga=7000;
-        }
-
-        return harga;
-    }
 }

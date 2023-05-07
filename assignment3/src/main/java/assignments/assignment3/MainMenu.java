@@ -12,6 +12,7 @@ import java.util.Scanner;
 import static assignments.assignment3.nota.NotaManager.cal;
 import static assignments.assignment3.nota.NotaManager.fmt;
 
+//berikut atribut dari main menu
 public class MainMenu {
     private final Scanner in;
     private final LoginManager loginManager;

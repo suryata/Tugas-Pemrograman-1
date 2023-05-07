@@ -5,7 +5,7 @@ import assignments.assignment3.user.Member;
 import java.util.Scanner;
 
 public abstract class SystemCLI {
-    protected Member[] memberList = new Member[0];
+    protected Member[] memberList = new Member[0];      //digunakan bersama oleh membersystem dan employeesystem
     protected Member loginMember;
     protected Scanner in;
 
@@ -18,12 +18,12 @@ public abstract class SystemCLI {
      * @param inputPassword -> password user yang akan diautentikasi.
      */
     public void login(Scanner in, String inputId, String inputPassword){
-        Member authMember = authUser(inputId, inputPassword);
+        Member authMember = authUser(inputId, inputPassword);   //mereturn member
 
         if (authMember != null) {
             this.in = in;
             System.out.println("Login successful!");
-            run(in, authMember);
+            run(in, authMember);                                //jika login berhasil run program
         }else{
             System.out.println("Invalid ID or password.");
         }
@@ -89,7 +89,7 @@ public abstract class SystemCLI {
      */
     protected void displayMenu(){
         System.out.printf("\nLogin as : %s\nSelamat datang %s!\n\n", loginMember.getId(), loginMember.getNama());
-        displaySpecificMenu();
+        displaySpecificMenu();              //menu sesuai member/employee
         System.out.print("Apa yang ingin Anda lakukan hari ini? ");
     }
 

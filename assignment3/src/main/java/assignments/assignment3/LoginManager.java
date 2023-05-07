@@ -6,10 +6,12 @@ import assignments.assignment3.user.menu.EmployeeSystem;
 import assignments.assignment3.user.menu.MemberSystem;
 import assignments.assignment3.user.menu.SystemCLI;
 
+//berikut atribut dari loginmanager
 public class LoginManager {
     private final EmployeeSystem employeeSystem;
     private final MemberSystem memberSystem;
 
+    //berikut constructor dari loginmanager
     public LoginManager(EmployeeSystem employeeSystem, MemberSystem memberSystem) {
         this.employeeSystem = employeeSystem;
         this.memberSystem = memberSystem;

@@ -17,7 +17,7 @@ public class MemberSystem extends SystemCLI {
     @Override
     protected boolean processChoice(int choice) {
         boolean logout = false;
-        switch (choice) {
+        switch (choice) {           //saya menambah method laundry dan nota
             case 1 -> laundry();
             case 2 -> nota();
             case 3 -> logout = true;
@@ -50,6 +50,7 @@ public class MemberSystem extends SystemCLI {
         memberList = memberListNew;
     }
 
+    //method ini berfungsi jika member ingin laundry dan meminta paket berat dan service yang diinginkan
     private void laundry() {
         // Logic for handling laundry choice
         String paket = inputPaket();
@@ -62,6 +63,8 @@ public class MemberSystem extends SystemCLI {
         else{
             pembulatan="";
         }
+
+        //berikut ini meminta servis
         System.out.print(pembulatan);
         System.out.println("Apakah kamu ingin cucianmu disetrika oleh staff professional kami?\n"+"Hanya tambah 1000 / kg :0");
         System.out.print("[Ketik x untuk tidak mau]: ");
@@ -70,7 +73,7 @@ public class MemberSystem extends SystemCLI {
         System.out.print("[Ketik x untuk tidak mau]: ");
         boolean antar = validasiService();
 
-
+        //membuat nota dan menambah servis ke nota
         String tanggal = fmt.format(NotaManager.cal.getTime());
         Nota nota = new Nota(loginMember, berat, paket, tanggal);
         if (setrika){
@@ -80,6 +83,7 @@ public class MemberSystem extends SystemCLI {
             nota.addService(new AntarService());
         }
 
+        //menambah nota ke member tersebut dan ke notaManager
         loginMember.addNota(nota);
         NotaManager.addNota(nota);
         System.out.print("Nota berhasil dibuat!\n");
@@ -88,6 +92,7 @@ public class MemberSystem extends SystemCLI {
     
     private static SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");   //format tanggal
 
+    //jika dipilih 2 akan mengeprint seluruh nota yang dimiliki member tersebut
     private void nota() {
         // Logic for handling nota choice
         for (Nota nota : loginMember.getNotaList()) {
@@ -95,7 +100,7 @@ public class MemberSystem extends SystemCLI {
         }
     }
 
-
+    //jika x maka member tidak menggunakan service tersebut
     private boolean validasiService(){
         String pilihan = in.nextLine();
         if(pilihan.equalsIgnoreCase("x")){
@@ -104,6 +109,7 @@ public class MemberSystem extends SystemCLI {
         return true;
     }
 
+    //showpaket
     private void showPaket() {
         System.out.println("+-------------Paket-------------+");
         System.out.println("| Express | 1 Hari | 12000 / Kg |");
@@ -112,6 +118,7 @@ public class MemberSystem extends SystemCLI {
         System.out.println("+-------------------------------+");
     }
 
+    //validasi input paket dari tp 1
     private String inputPaket(){
         boolean ada=false;
         String paketLengkap="";
@@ -156,6 +163,7 @@ public class MemberSystem extends SystemCLI {
         return paketAsli;
     }
 
+    //validasi berat dari tp1
     public int validasiBerat(){
         int berat=0;
         boolean valid=false;
