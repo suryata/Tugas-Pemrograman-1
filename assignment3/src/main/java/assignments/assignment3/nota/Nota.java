@@ -25,7 +25,12 @@ public class Nota {
         this.member = member;
         this.paket = paket;
         this.berat = berat;
-        this.tanggalMasuk = tanggal;
+        try {
+            Date tanggalMasukDate = fmt.parse(tanggal);
+            this.tanggalMasuk = fmt.format(tanggalMasukDate);
+        } catch (ParseException e) {
+            this.tanggalMasuk = fmt.format(Calendar.getInstance().getTime());
+        }
         this.sisaHariPengerjaan = lamaHari(paket);
         this.id = totalNota;
         this.baseHarga = hargaPerKG(paket);
@@ -51,7 +56,6 @@ public class Nota {
     }
 
     public String kompensasi(){
-        setIsDone();
         if((getSisaHariPengerjaan()<0)){
             return " Ada kompensasi keterlambatan "+Math.abs(getSisaHariPengerjaan())+" * 2000 hari";
         }
@@ -83,6 +87,7 @@ public class Nota {
     }
 
     public void toNextDay() {
+        setIsDone();
         if(!isDone){
             sisaHariPengerjaan--;
         }
@@ -90,14 +95,26 @@ public class Nota {
 
     public long calculateHarga(){
         long harga = baseHarga*berat;
-        if(services.length==0){
-            return harga;
-        }
-        else{
-            for(LaundryService service : services){
-                harga+=service.getHarga(berat);
+        if(getSisaHariPengerjaan()<0){
+            if(services.length==0){
+                return (harga + 2000L * getSisaHariPengerjaan()) < 0 ? 0 : (harga + 2000L * getSisaHariPengerjaan());
             }
-            return harga;
+            else{
+                for(LaundryService service : services){
+                    harga+=service.getHarga(berat);
+                }
+                return (harga + 2000L * getSisaHariPengerjaan()) < 0 ? 0 : (harga + 2000L * getSisaHariPengerjaan());
+            }
+        }else{
+            if(services.length==0){
+                return harga;
+            }
+            else{
+                for(LaundryService service : services){
+                    harga+=service.getHarga(berat);
+                }
+                return harga;
+            }
         }
     }
 
@@ -132,12 +149,7 @@ public class Nota {
     @Override
     public String toString(){
         String service = getServiceList(services);
-        long hargaAkhir;
-        if(getSisaHariPengerjaan()<0){
-            hargaAkhir = calculateHarga()+(2000L*getSisaHariPengerjaan());
-        }else{
-            hargaAkhir=calculateHarga();
-        }
+        long hargaAkhir = calculateHarga();
         return "[ID Nota = "+id+"]\n"+
         "ID    : "+member.getId()+"\n"+
         "Paket : "+paket+"\n"+
@@ -168,6 +180,7 @@ public class Nota {
         return sisaHariPengerjaan;
     }
     public boolean isDone() {
+        setIsDone();
         return isDone;
     }
 

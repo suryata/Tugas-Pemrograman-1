@@ -1,7 +1,5 @@
 package assignments.assignment3.user.menu;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import assignments.assignment3.nota.Nota;
 import assignments.assignment3.nota.NotaManager;
@@ -72,9 +70,8 @@ public class MemberSystem extends SystemCLI {
         System.out.print("[Ketik x untuk tidak mau]: ");
         boolean antar = validasiService();
 
-        Calendar cal = Calendar.getInstance();
-        Date tanggalSekarang = cal.getTime();
-        String tanggal = fmt.format(tanggalSekarang);
+
+        String tanggal = fmt.format(NotaManager.cal.getTime());
         Nota nota = new Nota(loginMember, berat, paket, tanggal);
         if (setrika){
             nota.addService(new SetrikaService());
