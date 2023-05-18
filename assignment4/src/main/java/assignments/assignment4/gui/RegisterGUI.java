@@ -9,7 +9,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//registerGUI merupakan panel yang akan ditambahkan pada mainFrame jika button register ditekan
 public class RegisterGUI extends JPanel {
+    //berikut atribut yang dimiliki
     public static final String KEY = "REGISTER";
     private JPanel mainPanel;
     private JLabel nameLabel;
@@ -22,6 +24,7 @@ public class RegisterGUI extends JPanel {
     private LoginManager loginManager;
     private JButton backButton;
 
+    //inisiai register gui dengan borderlayout
     public RegisterGUI(LoginManager loginManager) {
         super(new BorderLayout()); // Setup layout, Feel free to make any changes
         this.loginManager = loginManager;
@@ -29,7 +32,7 @@ public class RegisterGUI extends JPanel {
         // Set up main panel, Feel free to make any changes
         mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
+        mainPanel.setBackground(new Color(255, 248, 214));
         initGUI();
 
         add(mainPanel, BorderLayout.CENTER);
@@ -41,20 +44,37 @@ public class RegisterGUI extends JPanel {
      * Be creative and have fun!
      * */
     private void initGUI() {
-        // TODO
-        // Set up komponen
+        // Set up komponen yang terdapat pada registerGUI
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10,0, 10, 0);
-
+        
+        Font font3 = new Font("Garamond",Font.PLAIN,15);
+        Color hijau = new Color(57, 81, 68);
+        
         nameLabel = new JLabel("Masukkan nama Anda:");
         nameTextField = new JTextField();
+        nameLabel.setFont(font3);
+        nameLabel.setForeground(hijau);
+
         phoneLabel = new JLabel("Masukkan nomor handphone Anda:");
         phoneTextField = new JTextField();
+        phoneLabel.setFont(font3);
+        phoneLabel.setForeground(hijau);
+
         passwordLabel = new JLabel("Masukkan password Anda:");
         passwordField = new JPasswordField();
         passwordField.setEchoChar('*');
+        passwordLabel.setFont(font3);
+        passwordLabel.setForeground(hijau);
+
         registerButton = new JButton("Register");
+        registerButton.setFont(font3);
+        registerButton.setForeground(hijau);
+
         backButton = new JButton("Kembali");
+        backButton.setFont(font3);
+        backButton.setForeground(hijau);
+
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -110,6 +130,10 @@ public class RegisterGUI extends JPanel {
      * */
     private void handleBack() {
         MainFrame.getInstance().navigateTo(HomeGUI.KEY);
+        //semua field akan dikosongkan
+        nameTextField.setText("");
+        phoneTextField.setText("");
+        passwordField.setText("");
     }
 
     /**
@@ -117,19 +141,19 @@ public class RegisterGUI extends JPanel {
     * Akan dipanggil jika pengguna menekan "registerButton"
     * */
     private void handleRegister() {
-        // TODO
         String nama = nameTextField.getText();
         String phone = phoneTextField.getText();
         String password = new String(passwordField.getPassword());
-        int noHP;
 
+        //jika ada field yang kosong akan menampilkan warning message
         if (nama.isEmpty() || phone.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(MainFrame.getInstance(),"Data tidak boleh kosong!","Empty Field",JOptionPane.WARNING_MESSAGE );
             return;
         }
 
+        //jika pada nomor telepon terdapat bukan angka menampilkan warning message
         try{
-            noHP = Integer.parseInt(phone);
+            Integer.parseInt(phone);
         }
         catch(NumberFormatException e){
             JOptionPane.showMessageDialog(MainFrame.getInstance(),"Nomor handphone harus berisi angka!", "Invalid Phone Number", JOptionPane.WARNING_MESSAGE);
@@ -137,12 +161,18 @@ public class RegisterGUI extends JPanel {
             return;
         }
 
-        String noHpString = Integer.toString(noHP);
-        Member registeredMember = loginManager.register(nama, noHpString, password);
+        //akan membuat member jika semuanya sesuai dan menggunakan register yang ada pada loginManager dan menambahkannya ke membersystem
+        Member registeredMember = loginManager.register(nama, phone, password);
+
+        //jika member sudah ada maka akan menampilkan warning message (registered membernya null)
         if(registeredMember == null){
-            JOptionPane.showMessageDialog(MainFrame.getInstance(),"User dengan nama "+nama+" dan nomor hp "+noHpString+" sudah ada!", "Registration Failed", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(),"User dengan nama "+nama+" dan nomor hp "+phone+" sudah ada!", "Registration Failed", JOptionPane.WARNING_MESSAGE);
+            handleBack();
             return;
         }
+
+        //jika berhasil akan kembali ke home panel
         JOptionPane.showMessageDialog(MainFrame.getInstance(),"Berhasil membuat user dengan ID "+registeredMember.getId()+"!","Registration Succesful",JOptionPane.INFORMATION_MESSAGE);
+        handleBack();
     }
 }

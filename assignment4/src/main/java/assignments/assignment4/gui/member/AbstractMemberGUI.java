@@ -9,29 +9,40 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//Abstract Class yang akan diterapkan pada MemberSystem dan EmployeeSystem
+//mengimplements Loginable
 public abstract class AbstractMemberGUI extends JPanel implements Loginable{
+    //beriut atribut yang dimiliki
     private JLabel welcomeLabel;
     private JLabel loggedInAsLabel;
     protected Member loggedInMember;
     private final SystemCLI systemCLI;
 
+    //inisialisasi 
     public AbstractMemberGUI(SystemCLI systemCLI) {
         super(new BorderLayout());
         this.systemCLI = systemCLI;
+        
         // Set up welcome label
+        setBackground(new Color(255, 248, 214));
         welcomeLabel = new JLabel("", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        welcomeLabel.setFont(new Font("Bodoni", Font.BOLD | Font.ITALIC, 21));
+        welcomeLabel.setForeground(new Color(57, 81, 68));
         add(welcomeLabel, BorderLayout.NORTH);
 
-        // // Set up footer
-        // loggedInAsLabel = new JLabel("", SwingConstants.CENTER);
-        // add(loggedInAsLabel, BorderLayout.SOUTH);
+        // Set up footer
+        loggedInAsLabel = new JLabel("", SwingConstants.CENTER);
+        loggedInAsLabel.setFont(new Font("Bodoni", Font.BOLD | Font.ITALIC, 14));
+        loggedInAsLabel.setForeground(new Color(57, 81, 68));
+        add(loggedInAsLabel, BorderLayout.SOUTH);
 
-        // // Initialize buttons
-        // JPanel buttonsPanel = initializeButtons();
-        // add(buttonsPanel, BorderLayout.CENTER);
+        // Initialize buttons
+        JPanel buttonsPanel = initializeButtons();
+        buttonsPanel.setBackground(new Color(255, 248, 214));
+        add(buttonsPanel, BorderLayout.CENTER);
     }
 
+    //initializebutton dari template yang diberikan
     /**
      * Membuat panel button yang akan ditampilkan pada Panel ini.
      * Buttons dan ActionListeners akan disupply oleh method createButtons() & createActionListeners() respectively.
@@ -63,7 +74,11 @@ public abstract class AbstractMemberGUI extends JPanel implements Loginable{
             buttonsPanel.add(button, gbc);
         }
 
+        Font font3 = new Font("Garamond",Font.PLAIN,15);
+        Color hijau = new Color(57, 81, 68);
         JButton logoutButton = new JButton("Logout");
+        logoutButton.setForeground(hijau);
+        logoutButton.setFont(font3);
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +92,7 @@ public abstract class AbstractMemberGUI extends JPanel implements Loginable{
     /**
      * Method untuk login pada panel.
      * <p>
-     * Method ini akan melakukan pengecekan apakah ID dan passowrd yang telah diberikan dapat login
+     * Method ini akan melakukan pengecekan apakah ID dan password yang telah diberikan dapat login
      * pada panel ini. <p>
      * Jika bisa, member akan login pada panel ini, method akan:<p>
      *  - mengupdate Welcome & LoggedInAs label.<p>
@@ -88,8 +103,16 @@ public abstract class AbstractMemberGUI extends JPanel implements Loginable{
      * @return true jika ID dan password sesuai dengan instance member, false jika tidak.
      * */
     public boolean login(String id, String password) {
-        // TODO
-        return false;
+        //saya menggunakan authUser pada TP3
+        loggedInMember = this.systemCLI.authUser(id,password);
+        if (loggedInMember == null) {
+            return false;
+        }
+        else{
+            welcomeLabel.setText("Welcome, " + loggedInMember.getNama() + "!");
+            loggedInAsLabel.setText("Logged in as "+loggedInMember.getId());
+            return true;
+        }
     }
 
     /**

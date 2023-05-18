@@ -14,8 +14,9 @@ import assignments.assignment4.gui.member.member.MemberSystemGUI;
 import javax.swing.*;
 import java.awt.*;
 
-
+//mainFrame mengextends frame yang berfungsi sebagai satu satunya frame pada GUI ini
 public class MainFrame extends JFrame{
+    //berikut atribut yang dimiliki
     private static MainFrame instance;
     private final Loginable[] loginablePanel;
     private final MemberSystem memberSystem = new MemberSystem();
@@ -30,8 +31,10 @@ public class MainFrame extends JFrame{
     private final MemberSystemGUI memberSystemGUI = new MemberSystemGUI(memberSystem);
     private final CreateNotaGUI createNotaGUI = new CreateNotaGUI(memberSystemGUI);
 
+    //menginisiasi frame utama
     private MainFrame(){
        super("CuciCuciSystem");
+       //menambahkan karyawan baru sesuai pada soal
        employeeSystem.addEmployee(new Employee[]{
                new Employee("delta Epsilon Huha Huha", "ImplicitDiff"),
                new Employee("Regret", "FansBeratKanaArima")
@@ -81,7 +84,7 @@ public class MainFrame extends JFrame{
      * @param page -> key dari halaman yang diinginkan.
      * */
     public void navigateTo(String page){
-        cards.show(mainPanel, page);
+        cards.show(mainPanel, page);                           //menampilkan panel yang sesuai
     }
 
     /**
@@ -94,12 +97,15 @@ public class MainFrame extends JFrame{
      * @param password -> password dari pengguna
      * @return boolean yang menandakan apakah login berhasil atau gagal.
      * */
+    //saya menggunakan loginable untuk login dan navigate ke panel yang sesuai jika id dan pass sesuai
     public boolean login(String id, String password){
-        for (Loginable panel:
-                loginablePanel) {
-            // TODO
-
+        for (Loginable panel: loginablePanel) {
+            if(panel.login(id, password)==true){
+                navigateTo(panel.getPageName());
+                return true;
+            } 
         }
+        JOptionPane.showMessageDialog(MainFrame.getInstance(),"ID atau Password Invalid!", "Wrong Pass or ID", JOptionPane.ERROR_MESSAGE);
         return false;
     }
 
@@ -115,6 +121,7 @@ public class MainFrame extends JFrame{
         navigateTo(HomeGUI.KEY);
     }
 
+    //memulai program
     public static void main(String[] args) {
         // menampilkan GUI kalian.
         // Jika ingin tau lebih lanjut mengapa menggunakan SwingUtilities.invokeLater

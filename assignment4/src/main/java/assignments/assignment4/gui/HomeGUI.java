@@ -11,7 +11,9 @@ import java.util.Calendar;
 
 import static assignments.assignment3.nota.NotaManager.toNextDay;
 
+//HomeGUI merupakan panel awal saat program dijalankan
 public class HomeGUI extends JPanel {
+    //berikut atribut yang dimiliki
     public static final String KEY = "HOME";
     private JLabel titleLabel;
     private JLabel dateLabel;
@@ -20,6 +22,7 @@ public class HomeGUI extends JPanel {
     private JButton registerButton;
     private JButton toNextDayButton;
 
+    //menginisiasi panel homeGUI
     public HomeGUI(){
         super(new BorderLayout()); // Setup layout, Feel free to make any changes
 
@@ -30,8 +33,7 @@ public class HomeGUI extends JPanel {
         initGUI();
 
         add(mainPanel, BorderLayout.CENTER);
-        Color pastel= new Color(255, 248, 214);
-        mainPanel.setBackground(pastel);
+        mainPanel.setBackground(new Color(255, 248, 214));
 
     }
 
@@ -41,11 +43,12 @@ public class HomeGUI extends JPanel {
      * Be creative and have fun!
      * */
     private void initGUI() {
-        // Set up title label
+        // Set up atribut dari homeGUI menggunakan gridbagconstraints
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(28,0, 28, 0);
-        Font font = new Font("Arial", Font.BOLD | Font.ITALIC, 21);
-        Font font2 = new Font("Arial", Font.BOLD | Font.ITALIC, 14);
+        Font font = new Font("Bodoni", Font.BOLD | Font.ITALIC, 21);
+        Font font2 = new Font("Bodoni", Font.BOLD | Font.ITALIC, 14);
+        Font font3 = new Font("Garamond",Font.PLAIN,15);
         Color hijau = new Color(57, 81, 68);
 
         titleLabel = new JLabel("Selamat datang di CuciCuci System!");
@@ -57,14 +60,14 @@ public class HomeGUI extends JPanel {
         dateLabel.setFont(font2);
 
         loginButton = new JButton("Login");
-        loginButton.setBackground(new Color(78, 108, 80));
-        loginButton.setForeground(Color.WHITE);
+        loginButton.setForeground(hijau);
+        loginButton.setFont(font3);
         registerButton = new JButton("Register");
-        registerButton.setBackground(hijau);
-        registerButton.setForeground(Color.WHITE);
+        registerButton.setForeground(hijau);
+        registerButton.setFont(font3);
         toNextDayButton = new JButton("Next Day");
-        toNextDayButton.setBackground(new Color(78, 108, 80));
-        toNextDayButton.setForeground(Color.WHITE);
+        toNextDayButton.setForeground(hijau);
+        toNextDayButton.setFont(font3);
 
         gbc.gridx = 3;
         gbc.gridy = 0;
@@ -82,18 +85,21 @@ public class HomeGUI extends JPanel {
         gbc.gridy = 12;
         mainPanel.add(dateLabel,gbc);
         
+        //actionlistener untuk login button akan memanggil method handleToLogin
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleToLogin();
         }});
 
+        //actionlistener untuk register button akan memanggil method handleToRegister
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleToRegister();
         }});
 
+        //actionlistener untuk nextday akan memanggil method handleNextDay
         toNextDayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -123,8 +129,11 @@ public class HomeGUI extends JPanel {
      * Akan dipanggil jika pengguna menekan "toNextDayButton"
      * */
     private void handleNextDay() {
+        //memanggil toNextDay yang ada pada notamanager
         toNextDay();
         NotaManager.cal.add(Calendar.DATE,1);
         dateLabel.setText("Hari ini: "+NotaManager.fmt.format(NotaManager.cal.getTime()));
+        //akan mengshow massage
+        JOptionPane.showMessageDialog(this,"Kamu tidur hari ini...zzz...", "This is Prince Paul's Bubble Party's ability!", JOptionPane.INFORMATION_MESSAGE);
     }
 }

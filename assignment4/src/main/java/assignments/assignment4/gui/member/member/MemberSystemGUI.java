@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+//Panel jika yang dilogin adalah member
 public class MemberSystemGUI extends AbstractMemberGUI {
     public static final String KEY = "MEMBER";
 
@@ -34,8 +35,17 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * */
     @Override
     protected JButton[] createButtons() {
-        // TODO
+        Font font3 = new Font("Garamond",Font.PLAIN,15);
+        Color hijau = new Color(57, 81, 68);
+        JButton laundryButton = new JButton("Saya ingin laundry");
+        JButton showNota = new JButton("Lihat detail nota saya");
+        laundryButton.setForeground(hijau);
+        laundryButton.setFont(font3);
+        showNota.setForeground(hijau);
+        showNota.setFont(font3);
+
         return new JButton[]{
+            laundryButton,showNota
         };
     }
 
@@ -58,7 +68,26 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button pertama pada createButtons
      * */
     private void showDetailNota() {
-        // TODO
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Nota nota : loggedInMember.getNotaList()) {
+            stringBuilder.append(nota.toString()).append("\n");
+        }
+        String result = stringBuilder.toString();
+        String notaKosong = "Belum pernah laundry di CuciCuci, hiks :'(";
+
+        JTextArea textArea = new JTextArea(19,30);
+        textArea.setEditable(false);
+
+        //menampilkan nota yang dimiliki oleh member yang sedang login jika kosng akan menampilkan nota kosong
+        if(result.isEmpty()){
+            textArea.setText(notaKosong);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(),new JScrollPane(textArea),"Detail Nota",JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            textArea.setText(result);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(),new JScrollPane(textArea),"Detail Nota",JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }
 
     /**
@@ -66,7 +95,7 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button kedua pada createButtons
      * */
     private void createNota() {
-        // TODO
+        MainFrame.getInstance().navigateTo(CreateNotaGUI.KEY);
     }
 
 }
